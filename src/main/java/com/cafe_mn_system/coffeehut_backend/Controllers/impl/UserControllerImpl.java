@@ -19,11 +19,21 @@ public class UserControllerImpl implements UserController {
 
     @Override
     public ResponseEntity<String> signUp(Map<String, String> requestMap) {
-        try{
+        try {
             return userService.signUp(requestMap);
-        }catch (Exception exception){
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
-        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> login(Map<String, String> requestMap) {
+        try {
+            return userService.login(requestMap);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -1,7 +1,10 @@
 package com.cafe_mn_system.coffeehut_backend.Services.impl;
 
+import com.cafe_mn_system.coffeehut_backend.Jwt.JwtFilter;
+import com.cafe_mn_system.coffeehut_backend.Jwt.JwtUtils;
 import com.cafe_mn_system.coffeehut_backend.Models.User;
 import com.cafe_mn_system.coffeehut_backend.Repo.UserRepo;
+import com.cafe_mn_system.coffeehut_backend.Security.CustomUserDetailService;
 import com.cafe_mn_system.coffeehut_backend.Services.UserService;
 import com.cafe_mn_system.coffeehut_backend.Utils.CoffeeHutConstants;
 import com.cafe_mn_system.coffeehut_backend.Utils.CoffeeHutUtils;
@@ -9,8 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -20,6 +27,15 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private CustomUserDetailService customUserDetailService;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Override
     public ResponseEntity<String> signUp(Map<String, String> requestMap) {
@@ -33,18 +49,44 @@ public class UserServiceImpl implements UserService {
 
                     User createdUser = getUserFromRequestMap(requestMap);
                     userRepo.save(createdUser);
-                    return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.USER_REGISTER_SUCCESSFULLY, HttpStatus.CREATED);
+                    return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.USER_REGISTER_SUCCESSFULLY, HttpStatus.CREATED);
 
                 } else {
-                    return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.EMAIL_ALREADY_EXISTS, HttpStatus.BAD_REQUEST);
+                    return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.EMAIL_ALREADY_EXISTS, HttpStatus.BAD_REQUEST);
                 }
             } else {
-                return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.INVALID_DATA, HttpStatus.BAD_REQUEST);
+                return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.INVALID_DATA, HttpStatus.BAD_REQUEST);
             }
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> login(Map<String, String> requestMap) {
+        log.info("Inside login {] ", requestMap);
+
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(requestMap.get("email"), requestMap.get("password"))
+            );
+
+            if (authentication.isAuthenticated()) {
+                if (customUserDetailService.getUserDetails().getStatus().equalsIgnoreCase("true")) {
+                    String token = jwtUtils.tokenGenerate(customUserDetailService.getUserDetails().getEmail(), customUserDetailService.getUserDetails().getRole());
+
+                    return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.TOKEN, token, HttpStatus.OK);
+                } else {
+                    return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.WAIT_FOR_APPROVAL, HttpStatus.BAD_REQUEST);
+                }
+            }else{
+                return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.BAD_CREDENTIALS, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // Validate request map for SignUp
