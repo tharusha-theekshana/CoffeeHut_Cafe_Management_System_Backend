@@ -1,5 +1,6 @@
 package com.cafe_mn_system.coffeehut_backend.Services.impl;
 
+import com.cafe_mn_system.coffeehut_backend.Dto.UserDto;
 import com.cafe_mn_system.coffeehut_backend.Jwt.JwtFilter;
 import com.cafe_mn_system.coffeehut_backend.Jwt.JwtUtils;
 import com.cafe_mn_system.coffeehut_backend.Models.User;
@@ -17,7 +18,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -33,6 +35,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private JwtFilter jwtFilter;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -87,6 +92,30 @@ public class UserServiceImpl implements UserService {
             exception.printStackTrace();
         }
         return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // Get All Users
+    @Override
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        log.info("Inside get all users");
+
+        try {
+
+            if(jwtFilter.isAdmin()){
+
+                List<UserDto> userList = userRepo.getAllUsers();
+
+                return new ResponseEntity<>(userList,HttpStatus.OK);
+
+
+            }else {
+                return new ResponseEntity<List<UserDto>>(new ArrayList<>(),HttpStatus.UNAUTHORIZED);
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return new ResponseEntity<List<UserDto>>(new ArrayList<>(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // Validate request map for SignUp
