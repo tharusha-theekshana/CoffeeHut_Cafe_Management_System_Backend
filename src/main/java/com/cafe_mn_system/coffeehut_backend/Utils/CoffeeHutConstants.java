@@ -16,7 +16,13 @@ public class CoffeeHutConstants {
     public static final String USER_REGISTER_SUCCESSFULLY = "User Register Successfully ... !";
     public static final String USER_LOGIN_SUCCESSFULLY = "User Login Successfully ... !";
     public static final String WAIT_FOR_APPROVAL = "Wait for Admin Approval ... !";
+    public static final String FETCH_DATA_SUCCESSFULLY = "Fetch Data Successfully ... !";
     public static final String MESSAGE = "Message";
+    public static final String DATA = "Data";
     public static final String TOKEN = "Token";
     public static final String BAD_CREDENTIALS = "Bad Credentials ... !";
+    public static final String ACCESS_DENIED = "Access Denied ... !";
+    public static final String USER_NOT_FOUND = "User not Found ... !";
+    public static final String USER_UPDATED_SUCCESSFULLY = "User Updated Successfully ... !";
+    public static final String ACCOUNT_APPROVED = "Account Approved ... !";
 }

@@ -9,6 +9,7 @@ import com.cafe_mn_system.coffeehut_backend.Security.CustomUserDetailService;
 import com.cafe_mn_system.coffeehut_backend.Services.UserService;
 import com.cafe_mn_system.coffeehut_backend.Utils.CoffeeHutConstants;
 import com.cafe_mn_system.coffeehut_backend.Utils.CoffeeHutUtils;
+import com.cafe_mn_system.coffeehut_backend.Utils.EmailUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,10 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -41,6 +39,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private EmailUtil emailUtil;
 
     @Override
     public ResponseEntity<String> signUp(Map<String, String> requestMap) {
@@ -85,7 +86,7 @@ public class UserServiceImpl implements UserService {
                 } else {
                     return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.WAIT_FOR_APPROVAL, HttpStatus.BAD_REQUEST);
                 }
-            }else{
+            } else {
                 return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.BAD_CREDENTIALS, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (Exception exception) {
@@ -96,26 +97,70 @@ public class UserServiceImpl implements UserService {
 
     // Get All Users
     @Override
-    public ResponseEntity<List<UserDto>> getAllUsers() {
+    public ResponseEntity<Map<String, Object>> getAllUsers() {
         log.info("Inside get all users");
 
         try {
 
-            if(jwtFilter.isAdmin()){
+            if (jwtFilter.isAdmin()) {
 
                 List<UserDto> userList = userRepo.getAllUsers();
+                return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.FETCH_DATA_SUCCESSFULLY, userList, HttpStatus.OK);
 
-                return new ResponseEntity<>(userList,HttpStatus.OK);
-
-
-            }else {
-                return new ResponseEntity<List<UserDto>>(new ArrayList<>(),HttpStatus.UNAUTHORIZED);
+            } else {
+                return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.ACCESS_DENIED, new ArrayList<>(), HttpStatus.UNAUTHORIZED);
             }
 
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-        return new ResponseEntity<List<UserDto>>(new ArrayList<>(),HttpStatus.INTERNAL_SERVER_ERROR);
+        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.SOMETHING_WENT_WRONG, new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> updateUser(Map<String, String> requestMap) {
+        log.info("Inside update user {}", requestMap);
+
+        try {
+
+            if (jwtFilter.isAdmin()) {
+
+                Optional<User> user = userRepo.findById(Integer.parseInt(requestMap.get("id")));
+
+                if (!user.isEmpty()) {
+                    userRepo.updateStatus(requestMap.get("status"), Integer.parseInt(requestMap.get("id")));
+                    sendMailToAllAdmins(requestMap.get("status"), user.get().getEmail(), userRepo.getAllAdmins());
+                    return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.USER_UPDATED_SUCCESSFULLY, HttpStatus.OK);
+
+
+                } else {
+                    return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+                }
+
+
+            } else {
+                return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.ACCESS_DENIED, HttpStatus.UNAUTHORIZED);
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    //Send mails to all admin mails
+    private void sendMailToAllAdmins(String status, String user, List<String> allAdmins) {
+
+        // Remove login admin user account form admin list
+        allAdmins.remove(jwtFilter.getCurrentUser());
+
+        // Mail send for account activate and disable
+        if (status != null && status.equalsIgnoreCase("true")) {
+            emailUtil.sendSimpleMessage(jwtFilter.getCurrentUser(), CoffeeHutConstants.ACCOUNT_APPROVED, "User Account - " + user + "\n is approved by \n Admin - " + jwtFilter.getCurrentUser(), allAdmins);
+        }else{
+            emailUtil.sendSimpleMessage(jwtFilter.getCurrentUser(), CoffeeHutConstants.ACCOUNT_APPROVED, "User Account :- " + user + "\n is disabled by \n Admin - " + jwtFilter.getCurrentUser(), allAdmins);
+        }
+
     }
 
     // Validate request map for SignUp
