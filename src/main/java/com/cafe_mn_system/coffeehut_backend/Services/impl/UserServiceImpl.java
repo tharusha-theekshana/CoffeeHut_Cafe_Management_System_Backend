@@ -132,7 +132,6 @@ public class UserServiceImpl implements UserService {
                     sendMailToAllAdmins(requestMap.get("status"), user.get().getEmail(), userRepo.getAllAdmins());
                     return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.USER_UPDATED_SUCCESSFULLY, HttpStatus.OK);
 
-
                 } else {
                     return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
                 }
@@ -148,7 +147,47 @@ public class UserServiceImpl implements UserService {
         return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    //Send mails to all admin mails
+    @Override
+    public ResponseEntity<String> checkToken() {
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.TOKEN_VALIDATE, HttpStatus.OK);
+    }
+
+    // Change password function
+    @Override
+    public ResponseEntity<String> changePassword(Map<String, String> requestMap) {
+        log.info("Inside change password {}", requestMap);
+
+        try {
+           User user = userRepo.findByEmail(jwtFilter.getCurrentUser());
+
+           if (!user.equals(null)){
+               if (user.getPassword().equals(requestMap.get("oldPassword"))){
+
+                   if (requestMap.get("newPassword").isEmpty()){
+                       return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.INCORRECT_NEW_PASSWORD, HttpStatus.BAD_REQUEST);
+                   }else{
+                       if (requestMap.get("newPassword").equalsIgnoreCase(user.getPassword())){
+                           return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.ALREADY_EXIST_PASSWORD, HttpStatus.BAD_REQUEST);
+                       }else{
+                           user.setPassword(requestMap.get("newPassword"));
+                           userRepo.save(user);
+                           return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.PASSWORD_UPDATED_SUCCESSFULLY, HttpStatus.OK);
+                       }
+                   }
+               }else{
+                   return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.INCORRECT_OLD_PASSWORD, HttpStatus.BAD_REQUEST);
+               }
+
+           }else{
+               return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+           }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // Send mails to all admin mails
     private void sendMailToAllAdmins(String status, String user, List<String> allAdmins) {
 
         // Remove login admin user account form admin list

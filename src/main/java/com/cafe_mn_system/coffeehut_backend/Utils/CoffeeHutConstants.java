@@ -25,4 +25,9 @@ public class CoffeeHutConstants {
     public static final String USER_NOT_FOUND = "User not Found ... !";
     public static final String USER_UPDATED_SUCCESSFULLY = "User Updated Successfully ... !";
     public static final String ACCOUNT_APPROVED = "Account Approved ... !";
+    public static final String TOKEN_VALIDATE = "Token is Validate ... !";
+    public static final String INCORRECT_OLD_PASSWORD = "Incorrect Old Password ... !";
+    public static final String PASSWORD_UPDATED_SUCCESSFULLY = "Password Change Successfully ... !";
+    public static final String INCORRECT_NEW_PASSWORD = "New Password is Empty ... !";
+    public static final String ALREADY_EXIST_PASSWORD = "New Password can not be Old Password ... !";
 }

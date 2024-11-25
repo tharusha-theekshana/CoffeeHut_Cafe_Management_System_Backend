@@ -20,4 +20,10 @@ public interface UserController {
     @PutMapping()
     public ResponseEntity<String> updateUser(@RequestBody(required = true) Map<String,String> requestMap);
 
+    @GetMapping("/checkToken")
+    public ResponseEntity<String> checkToken();
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<String> changePassword(@RequestBody(required = true) Map<String,String> requestMap);
+
 }
