@@ -30,4 +30,6 @@ public class CoffeeHutConstants {
     public static final String PASSWORD_UPDATED_SUCCESSFULLY = "Password Change Successfully ... !";
     public static final String INCORRECT_NEW_PASSWORD = "New Password is Empty ... !";
     public static final String ALREADY_EXIST_PASSWORD = "New Password can not be Old Password ... !";
+    public static final String EMAIL_IS_REQUIRED = "Email is required ... !";
+    public static final String MAIL_SENT_SUCCESSFULLY = "Mail Sent Successfully ... !";
 }

@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
         return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.TOKEN_VALIDATE, HttpStatus.OK);
     }
 
-    // Change password function
+    // Change password  method
     @Override
     public ResponseEntity<String> changePassword(Map<String, String> requestMap) {
         log.info("Inside change password {}", requestMap);
@@ -181,6 +181,33 @@ public class UserServiceImpl implements UserService {
            }else{
                return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // Forgot password method
+    @Override
+    public ResponseEntity<String> forgotPassword(Map<String, String> requestMap) {
+        log.info("Inside forgot password {}", requestMap);
+
+        try {
+            if (requestMap.get("email").isEmpty()){
+                return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.EMAIL_IS_REQUIRED, HttpStatus.BAD_REQUEST);
+            }
+
+            User user = userRepo.findByEmail(requestMap.get("email"));
+
+            if (!Objects.isNull(user)){
+
+                emailUtil.forgotMail(user.getEmail().toString(),"Credentials",user.getPassword());
+                return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.MAIL_SENT_SUCCESSFULLY, HttpStatus.OK);
+
+            }else{
+                return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+            }
+
         } catch (Exception exception) {
             exception.printStackTrace();
         }
