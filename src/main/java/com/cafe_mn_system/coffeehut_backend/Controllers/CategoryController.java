@@ -13,4 +13,7 @@ public interface CategoryController {
 
     @GetMapping()
     ResponseEntity<Map<String, Object>> getAllCategories(@RequestParam(required = false) String filterValue);
+
+    @PutMapping
+    ResponseEntity<String> updateCategory(@RequestBody(required = true) Map<String,String> requestMap);
 }

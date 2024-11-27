@@ -35,4 +35,6 @@ public class CoffeeHutConstants {
     public static final String CATEGORY_SAVE_SUCCESSFULLY = "Category Saved Successfully ... !";
     public static final String CATEGORY_NAME_REQUIRED = "Category Name is required ... !";
     public static final String CATEGORY_ALREADY_EXISTS = "Category Already Exists ... !";
+    public static final String CATEGORY_NOT_FOUND = "Category id Not Found ... !";
+    public static final String CATEGORY_UPDATED = "Category Updated Successfully ... !";
 }

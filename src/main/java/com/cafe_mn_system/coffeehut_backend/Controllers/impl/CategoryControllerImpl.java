@@ -38,4 +38,14 @@ public class CategoryControllerImpl implements CategoryController {
         return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.ACCESS_DENIED,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @Override
+    public ResponseEntity<String> updateCategory(Map<String, String> requestMap) {
+        try{
+            return categoryService.updateCategory(requestMap);
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

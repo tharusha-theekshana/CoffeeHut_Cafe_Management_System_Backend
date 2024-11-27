@@ -13,10 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -69,6 +66,30 @@ public class CategoryServiceImpl implements CategoryService {
             exception.printStackTrace();
         }
         return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.SOMETHING_WENT_WRONG, new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> updateCategory(Map<String, String> requestMap) {
+        try {
+            if (jwtFilter.isAdmin()){
+
+                if (validateCategoryMap(requestMap,true)){
+                    Optional<Category> category = categoryRepo.findById(Integer.parseInt(requestMap.get("id")));
+
+                    if (!category.isEmpty()){
+                        categoryRepo.save(getCategoryFromMap(requestMap,true));
+                        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.CATEGORY_UPDATED, HttpStatus.OK);
+                    }else {
+                        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.CATEGORY_NOT_FOUND, HttpStatus.NOT_FOUND);
+                    }
+                }
+            }else{
+                return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.ACCESS_DENIED, HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
