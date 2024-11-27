@@ -32,4 +32,7 @@ public class CoffeeHutConstants {
     public static final String ALREADY_EXIST_PASSWORD = "New Password can not be Old Password ... !";
     public static final String EMAIL_IS_REQUIRED = "Email is required ... !";
     public static final String MAIL_SENT_SUCCESSFULLY = "Mail Sent Successfully ... !";
+    public static final String CATEGORY_SAVE_SUCCESSFULLY = "Category Saved Successfully ... !";
+    public static final String CATEGORY_NAME_REQUIRED = "Category Name is required ... !";
+    public static final String CATEGORY_ALREADY_EXISTS = "Category Already Exists ... !";
 }
