@@ -17,5 +17,4 @@ public interface CategoryRepo extends JpaRepository<Category,Integer> {
     @Query(nativeQuery = true,value = "SELECT * FROM category WHERE name =:categoryName")
     Category getCategoryByName(@Param("categoryName") String categoryName);
 
-
 }

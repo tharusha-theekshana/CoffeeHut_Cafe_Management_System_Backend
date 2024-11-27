@@ -6,12 +6,15 @@ import com.cafe_mn_system.coffeehut_backend.Repo.CategoryRepo;
 import com.cafe_mn_system.coffeehut_backend.Services.CategoryService;
 import com.cafe_mn_system.coffeehut_backend.Utils.CoffeeHutConstants;
 import com.cafe_mn_system.coffeehut_backend.Utils.CoffeeHutUtils;
+import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -31,9 +34,9 @@ public class CategoryServiceImpl implements CategoryService {
             if (jwtFilter.isAdmin()) {
                 Category category = categoryRepo.getCategoryByName(requestMap.get("name").toLowerCase());
 
-                if(category != null){
+                if (category != null) {
                     return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.CATEGORY_ALREADY_EXISTS, HttpStatus.CREATED);
-                }else{
+                } else {
                     if (validateCategoryMap(requestMap, false)) {
                         categoryRepo.save(getCategoryFromMap(requestMap, false));
                         return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.CATEGORY_SAVE_SUCCESSFULLY, HttpStatus.CREATED);
@@ -49,6 +52,25 @@ public class CategoryServiceImpl implements CategoryService {
         }
         return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<Map<String, Object>> getAllCategories(String filterValue) {
+        try {
+
+            if (!Strings.isNullOrEmpty(filterValue) && filterValue.equalsIgnoreCase("true")){
+                List<Category> categoryList = categoryRepo.getAllCategory();
+                return CoffeeHutUtils.getResponseEntityForCategoryList(CoffeeHutConstants.FETCH_DATA_SUCCESSFULLY, categoryList, HttpStatus.OK);
+            }else{
+                List<Category> categoryList = categoryRepo.findAll();
+                return CoffeeHutUtils.getResponseEntityForCategoryList(CoffeeHutConstants.FETCH_DATA_SUCCESSFULLY, categoryList, HttpStatus.OK);
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.SOMETHING_WENT_WRONG, new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 
     private boolean checkCategoryAlreadyExist(Map<String, String> requestMap) {
         Category category = categoryRepo.getCategoryByName(requestMap.get("name"));
