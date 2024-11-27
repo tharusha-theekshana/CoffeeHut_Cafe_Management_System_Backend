@@ -25,9 +25,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private JwtFilter jwtFilter;
 
+    //Add new category
     @Override
     public ResponseEntity<String> addNewCategory(Map<String, String> requestMap) {
         try {
+            // Check user is admin
             if (jwtFilter.isAdmin()) {
                 Category category = categoryRepo.getCategoryByName(requestMap.get("name").toLowerCase());
 
@@ -50,14 +52,15 @@ public class CategoryServiceImpl implements CategoryService {
         return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // Get all category
     @Override
     public ResponseEntity<Map<String, Object>> getAllCategories(String filterValue) {
         try {
 
-            if (!Strings.isNullOrEmpty(filterValue) && filterValue.equalsIgnoreCase("true")){
+            if (!Strings.isNullOrEmpty(filterValue) && filterValue.equalsIgnoreCase("true")) {
                 List<Category> categoryList = categoryRepo.getAllCategory();
                 return CoffeeHutUtils.getResponseEntityForCategoryList(CoffeeHutConstants.FETCH_DATA_SUCCESSFULLY, categoryList, HttpStatus.OK);
-            }else{
+            } else {
                 List<Category> categoryList = categoryRepo.findAll();
                 return CoffeeHutUtils.getResponseEntityForCategoryList(CoffeeHutConstants.FETCH_DATA_SUCCESSFULLY, categoryList, HttpStatus.OK);
             }
@@ -68,22 +71,23 @@ public class CategoryServiceImpl implements CategoryService {
         return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.SOMETHING_WENT_WRONG, new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // Update category
     @Override
     public ResponseEntity<String> updateCategory(Map<String, String> requestMap) {
         try {
-            if (jwtFilter.isAdmin()){
+            if (jwtFilter.isAdmin()) {
 
-                if (validateCategoryMap(requestMap,true)){
+                if (validateCategoryMap(requestMap, true)) {
                     Optional<Category> category = categoryRepo.findById(Integer.parseInt(requestMap.get("id")));
 
-                    if (!category.isEmpty()){
-                        categoryRepo.save(getCategoryFromMap(requestMap,true));
+                    if (!category.isEmpty()) {
+                        categoryRepo.save(getCategoryFromMap(requestMap, true));
                         return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.CATEGORY_UPDATED, HttpStatus.OK);
-                    }else {
+                    } else {
                         return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.CATEGORY_NOT_FOUND, HttpStatus.NOT_FOUND);
                     }
                 }
-            }else{
+            } else {
                 return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.ACCESS_DENIED, HttpStatus.UNAUTHORIZED);
             }
         } catch (Exception exception) {
@@ -92,6 +96,31 @@ public class CategoryServiceImpl implements CategoryService {
         return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // Delete category
+    @Override
+    public ResponseEntity<String> deleteCategory(String id) {
+        try {
+
+            if (jwtFilter.isAdmin()) {
+
+                // Check category is exists according to id
+                Optional<Category> category = categoryRepo.findById(Integer.parseInt(id));
+
+                if (category.isEmpty()) {
+                    return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.CATEGORY_NOT_FOUND, HttpStatus.NOT_FOUND);
+                } else {
+
+                    categoryRepo.deleteById(Integer.parseInt(id));
+                    return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.CATEGORY_DELETED, HttpStatus.OK);
+                }
+            } else {
+                return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.ACCESS_DENIED, HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     private boolean checkCategoryAlreadyExist(Map<String, String> requestMap) {
         Category category = categoryRepo.getCategoryByName(requestMap.get("name"));
@@ -103,6 +132,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    // Validate pass request body
     private boolean validateCategoryMap(Map<String, String> requestMap, boolean validateId) {
         if (requestMap.containsKey("name")) {
             if (requestMap.containsKey("id") && validateId) {
@@ -116,6 +146,7 @@ public class CategoryServiceImpl implements CategoryService {
         return false;
     }
 
+    // Check category already exists
     private Category getCategoryFromMap(Map<String, String> requestMap, boolean isAdd) {
         Category category = new Category();
 

@@ -48,4 +48,14 @@ public class CategoryControllerImpl implements CategoryController {
         return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @Override
+    public ResponseEntity<String> deleteCategory(String id) {
+        try{
+            return categoryService.deleteCategory(id);
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }
