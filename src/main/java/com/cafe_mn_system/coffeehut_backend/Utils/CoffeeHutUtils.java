@@ -1,5 +1,6 @@
 package com.cafe_mn_system.coffeehut_backend.Utils;
 
+import com.cafe_mn_system.coffeehut_backend.Dto.ProductDto;
 import com.cafe_mn_system.coffeehut_backend.Dto.UserDto;
 import com.cafe_mn_system.coffeehut_backend.Models.Category;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,16 @@ public class CoffeeHutUtils {
     }
 
     public static ResponseEntity<Map<String, Object>> getResponseEntityForCategoryList(String message, List<Category> categoryList, HttpStatus httpStatus) {
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("Status", httpStatus.value());
+        responseBody.put("Message", message);
+        responseBody.put("Data", categoryList);
+
+        return new ResponseEntity<>(responseBody, httpStatus);
+    }
+
+    public static ResponseEntity<Map<String, Object>> getResponseEntityForProductList(String message, List<ProductDto> categoryList, HttpStatus httpStatus) {
 
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("Status", httpStatus.value());

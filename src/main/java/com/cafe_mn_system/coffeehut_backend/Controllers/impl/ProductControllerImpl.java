@@ -1,7 +1,7 @@
 package com.cafe_mn_system.coffeehut_backend.Controllers.impl;
 
-import com.cafe_mn_system.coffeehut_backend.Controllers.CategoryController;
-import com.cafe_mn_system.coffeehut_backend.Services.CategoryService;
+import com.cafe_mn_system.coffeehut_backend.Controllers.ProductController;
+import com.cafe_mn_system.coffeehut_backend.Services.ProductService;
 import com.cafe_mn_system.coffeehut_backend.Utils.CoffeeHutConstants;
 import com.cafe_mn_system.coffeehut_backend.Utils.CoffeeHutUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +13,15 @@ import java.util.ArrayList;
 import java.util.Map;
 
 @RestController
-public class CategoryControllerImpl implements CategoryController {
+public class ProductControllerImpl implements ProductController {
 
     @Autowired
-    private CategoryService categoryService;
+    private ProductService productService;
 
     @Override
-    public ResponseEntity<String> addNewCategory(Map<String, String> requestMap) {
+    public ResponseEntity<String> addNewProduct(Map<String, String> requestMap) {
         try{
-            return categoryService.addNewCategory(requestMap);
+            return productService.addNewProduct(requestMap);
         }catch (Exception exception){
             exception.printStackTrace();
         }
@@ -29,9 +29,9 @@ public class CategoryControllerImpl implements CategoryController {
     }
 
     @Override
-    public ResponseEntity<Map<String, Object>> getAllCategories(String filterValue) {
+    public ResponseEntity<Map<String, Object>> getAllProducts() {
         try{
-            return categoryService.getAllCategories(filterValue);
+            return productService.getAllProducts();
         }catch (Exception exception){
             exception.printStackTrace();
         }
@@ -39,23 +39,12 @@ public class CategoryControllerImpl implements CategoryController {
     }
 
     @Override
-    public ResponseEntity<String> updateCategory(Map<String, String> requestMap) {
+    public ResponseEntity<String> updateProduct(Map<String, String> requestMap) {
         try{
-            return categoryService.updateCategory(requestMap);
+            return productService.updateProduct(requestMap);
         }catch (Exception exception){
             exception.printStackTrace();
         }
         return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-    @Override
-    public ResponseEntity<String> deleteCategory(String id) {
-        try{
-            return categoryService.deleteCategory(id);
-        }catch (Exception exception){
-            exception.printStackTrace();
-        }
-        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
 }
