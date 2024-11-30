@@ -50,4 +50,7 @@ public class CoffeeHutConstants {
     public static final String PRODUCT_SAVE_SUCCESSFULLY = "Product Saved Successfully ... !";
     public static final String PRODUCT_NOT_FOUND = "Product id Not Found ... !";
     public static final String PRODUCT_UPDATED_SUCCESSFULLY = "Product Updated Successfully ... !";
+    public static final String PRODUCT_DELETED_SUCCESSFULLY = "Product Deleted Successfully ... !";
+    public static final String PRODUCT_STATUS_FALSE = "Product Status is not Active ... !";
+    public static final String PRODUCT_STATUS_TRUE = "Product Status is Active ... !";
 }

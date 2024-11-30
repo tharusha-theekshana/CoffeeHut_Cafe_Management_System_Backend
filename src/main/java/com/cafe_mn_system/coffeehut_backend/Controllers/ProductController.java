@@ -17,5 +17,16 @@ public interface ProductController {
     @PutMapping
     ResponseEntity<String> updateProduct(@RequestBody(required = true) Map<String,String> requestMap);
 
+    @DeleteMapping("/{id}")
+    ResponseEntity<String> deleteProduct(@PathVariable Integer id);
+
+    @PostMapping("/updateStatus")
+    ResponseEntity<String> updateProductStatus(@RequestBody(required = true) Map<String,String> requestMap);
+
+    @GetMapping("/getByCategoryId/{id}")
+    ResponseEntity<Map<String, Object>> getByCategory(@PathVariable Integer id);
+
+    @GetMapping("/{id}")
+    ResponseEntity<Map<String, Object>> getProductById(@PathVariable Integer id);
 
 }

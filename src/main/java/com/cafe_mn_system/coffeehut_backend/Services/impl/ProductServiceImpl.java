@@ -26,6 +26,7 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private JwtFilter jwtFilter;
 
+    // Add product
     @Override
     public ResponseEntity<String> addNewProduct(Map<String, String> requestMap) {
         try{
@@ -49,6 +50,7 @@ public class ProductServiceImpl implements ProductService {
         return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // Get all products
     @Override
     public ResponseEntity<Map<String, Object>> getAllProducts() {
         try{
@@ -61,6 +63,7 @@ public class ProductServiceImpl implements ProductService {
         return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.SOMETHING_WENT_WRONG, new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // Update product
     @Override
     public ResponseEntity<String> updateProduct(Map<String, String> requestMap) {
         try{
@@ -91,6 +94,90 @@ public class ProductServiceImpl implements ProductService {
         return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // Delete product
+    @Override
+    public ResponseEntity<String> deleteProduct(Integer id) {
+        try{
+            if (jwtFilter.isAdmin()){
+
+                Optional<Product> product = productRepo.findById(id);
+
+                if (!product.isEmpty()){
+                    productRepo.deleteById(id);
+                    return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.PRODUCT_DELETED_SUCCESSFULLY, HttpStatus.OK);
+
+                }else{
+                    return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
+                }
+
+            }else{
+                return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.ACCESS_DENIED, HttpStatus.UNAUTHORIZED);
+            }
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // Update product status
+    @Override
+    public ResponseEntity<String> updateStatus(Map<String, String> requestMap) {
+        try{
+            if (jwtFilter.isAdmin()){
+
+                Optional<Product> product = productRepo.findById(Integer.parseInt(requestMap.get("id")));
+
+                if (!product.isEmpty()){
+                    if (requestMap.get("status").equalsIgnoreCase("true")){
+                        productRepo.updateProductStatus(requestMap.get("status"),Integer.parseInt(requestMap.get("id")));
+                        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.PRODUCT_STATUS_TRUE, HttpStatus.OK);
+                    }else{
+                        productRepo.updateProductStatus(requestMap.get("status"),Integer.parseInt(requestMap.get("id")));
+                        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.PRODUCT_STATUS_FALSE, HttpStatus.OK);
+                    }
+                }else{
+                    return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
+                }
+
+            }else{
+                return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.ACCESS_DENIED, HttpStatus.UNAUTHORIZED);
+            }
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // Get products by category id
+    @Override
+    public ResponseEntity<Map<String, Object>> gerProductsByCategoryId(Integer id) {
+        try{
+            List<ProductDto> productList = productRepo.getProductByCategoryId(id);
+            return CoffeeHutUtils.getResponseEntityForProductList(CoffeeHutConstants.FETCH_DATA_SUCCESSFULLY, productList, HttpStatus.OK);
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // Get product by id
+    @Override
+    public ResponseEntity<Map<String, Object>> getProductById(Integer id) {
+        try{
+            ProductDto product = productRepo.getProductById(id);
+
+            if (!Objects.isNull(product)){
+                return CoffeeHutUtils.getResponseEntityForProduct(CoffeeHutConstants.FETCH_DATA_SUCCESSFULLY, product , HttpStatus.OK);
+            }else{
+                return CoffeeHutUtils.getResponseEntityForProduct(CoffeeHutConstants.PRODUCT_NOT_FOUND, null , HttpStatus.OK);
+            }
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     private Product getProductFromMap(Map<String, String> requestMap, boolean isAdd) {
         Category category = new Category();
         category.setId(Integer.parseInt(requestMap.get("categoryId")));
@@ -111,6 +198,7 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
+    // Request map validate
     private boolean validateProductMap(Map<String, String> requestMap, boolean validateId) {
         System.out.println(requestMap);
         if ((requestMap.containsKey("name") && requestMap.containsKey("description") && requestMap.containsKey("price"))){

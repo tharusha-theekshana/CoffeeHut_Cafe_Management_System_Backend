@@ -49,12 +49,22 @@ public class CoffeeHutUtils {
         return new ResponseEntity<>(responseBody, httpStatus);
     }
 
-    public static ResponseEntity<Map<String, Object>> getResponseEntityForProductList(String message, List<ProductDto> categoryList, HttpStatus httpStatus) {
+    public static ResponseEntity<Map<String, Object>> getResponseEntityForProductList(String message, List<ProductDto> productList, HttpStatus httpStatus) {
 
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("Status", httpStatus.value());
         responseBody.put("Message", message);
-        responseBody.put("Data", categoryList);
+        responseBody.put("Data", productList);
+
+        return new ResponseEntity<>(responseBody, httpStatus);
+    }
+
+    public static ResponseEntity<Map<String, Object>> getResponseEntityForProduct(String message, ProductDto product , HttpStatus httpStatus) {
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("Status", httpStatus.value());
+        responseBody.put("Message", message);
+        responseBody.put("Data", product);
 
         return new ResponseEntity<>(responseBody, httpStatus);
     }

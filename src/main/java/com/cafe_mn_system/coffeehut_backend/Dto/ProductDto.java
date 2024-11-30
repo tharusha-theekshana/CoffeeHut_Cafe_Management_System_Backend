@@ -1,6 +1,5 @@
 package com.cafe_mn_system.coffeehut_backend.Dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -31,4 +30,6 @@ public class ProductDto {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
     }
+
+
 }

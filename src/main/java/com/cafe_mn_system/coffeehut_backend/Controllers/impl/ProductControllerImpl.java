@@ -47,4 +47,44 @@ public class ProductControllerImpl implements ProductController {
         }
         return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<String> deleteProduct(Integer id) {
+        try{
+            return productService.deleteProduct(id);
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> updateProductStatus(Map<String, String> requestMap) {
+        try{
+            return productService.updateStatus(requestMap);
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<Map<String, Object>> getByCategory(Integer id) {
+        try{
+            return productService.gerProductsByCategoryId(id);
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<Map<String, Object>> getProductById(Integer id) {
+        try{
+            return productService.getProductById(id);
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
