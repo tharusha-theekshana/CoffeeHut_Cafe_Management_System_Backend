@@ -38,4 +38,19 @@ public class CoffeeHutConstants {
     public static final String CATEGORY_NOT_FOUND = "Category id Not Found ... !";
     public static final String CATEGORY_UPDATED = "Category Updated Successfully ... !";
     public static final String CATEGORY_DELETED = "Category Deleted Successfully ... !";
+    public static final String INVALID_DATA_PRODUCT = "{" +
+            " \"Invalid Data. All Data is Required !\",\n" +
+            "  \t\t\t\"data\": {\n" +
+            "    \t\t\t\t\"name\": Required !\"\",\n" +
+            "    \t\t\t\t\"description\": Required ! \"\",\n" +
+            "    \t\t\t\t\"price\": Required !\"\",\n" +
+            "    \t\t\t\t\"categoryId\": Required !\"\"\n \t\t\t\t\t" +
+            "} \n" +
+            "\t\t\t\t}";
+    public static final String PRODUCT_SAVE_SUCCESSFULLY = "Product Saved Successfully ... !";
+    public static final String PRODUCT_NOT_FOUND = "Product id Not Found ... !";
+    public static final String PRODUCT_UPDATED_SUCCESSFULLY = "Product Updated Successfully ... !";
+    public static final String PRODUCT_DELETED_SUCCESSFULLY = "Product Deleted Successfully ... !";
+    public static final String PRODUCT_STATUS_FALSE = "Product Status is not Active ... !";
+    public static final String PRODUCT_STATUS_TRUE = "Product Status is Active ... !";
 }

@@ -35,7 +35,7 @@ public class CategoryControllerImpl implements CategoryController {
         }catch (Exception exception){
             exception.printStackTrace();
         }
-        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.ACCESS_DENIED,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
