@@ -53,4 +53,18 @@ public class CoffeeHutConstants {
     public static final String PRODUCT_DELETED_SUCCESSFULLY = "Product Deleted Successfully ... !";
     public static final String PRODUCT_STATUS_FALSE = "Product Status is not Active ... !";
     public static final String PRODUCT_STATUS_TRUE = "Product Status is Active ... !";
+    public static final String INVALID_DATA_BILL = "{" +
+            " \"Invalid Data. All Data is Required !\",\n" +
+            "  \t\t\t\"data\": {\n" +
+            "    \t\t\t\t\"name\": Required !\"\",\n" +
+            "    \t\t\t\t\"contactNumber\": Required ! \"\",\n" +
+            "    \t\t\t\t\"email\": Required !\"\",\n" +
+            "    \t\t\t\t\"paymentMethod\": Required !\"\",\n" +
+            "    \t\t\t\t\"productDetails\": Required !\"\",\n" +
+            "    \t\t\t\t\"totalAmount\": Required !\"\"\n \t\t\t\t\t" +
+            "} \n" +
+            "\t\t\t\t}";
+
+    public static final String BILL_GENERATE_SUCCESSFULLY = "Bill Generated Successfully ... !";
+    public static String LOCATION = "C:\\Projects\\Real projects\\CoffeeHut_Cafe_Management_System_Backend\\bills";
 }

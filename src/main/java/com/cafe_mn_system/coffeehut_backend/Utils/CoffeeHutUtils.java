@@ -3,10 +3,16 @@ package com.cafe_mn_system.coffeehut_backend.Utils;
 import com.cafe_mn_system.coffeehut_backend.Dto.ProductDto;
 import com.cafe_mn_system.coffeehut_backend.Dto.UserDto;
 import com.cafe_mn_system.coffeehut_backend.Models.Category;
+import com.google.common.base.Strings;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import lombok.NoArgsConstructor;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +65,7 @@ public class CoffeeHutUtils {
         return new ResponseEntity<>(responseBody, httpStatus);
     }
 
-    public static ResponseEntity<Map<String, Object>> getResponseEntityForProduct(String message, ProductDto product , HttpStatus httpStatus) {
+    public static ResponseEntity<Map<String, Object>> getResponseEntityForProduct(String message, ProductDto product, HttpStatus httpStatus) {
 
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("Status", httpStatus.value());
@@ -68,5 +74,26 @@ public class CoffeeHutUtils {
 
         return new ResponseEntity<>(responseBody, httpStatus);
     }
-}
 
+    public static String getUuid() {
+        Date date = new Date();
+        Long time = date.getTime();
+        return "BILL-" + time;
+    }
+
+    // Convert string to json array
+    public static JSONArray getJsonArray(String data) throws JSONException {
+        JSONArray jsonArray = new JSONArray(data);
+        return jsonArray;
+    }
+
+    public static Map<String, Object> getMapFromJson(String data) {
+        if (!Strings.isNullOrEmpty(data)) {
+            return new Gson().fromJson(data, new TypeToken<Map<String, Object>>() {
+            }.getType());
+        } else {
+            return new HashMap<>();
+        }
+    }
+
+}
