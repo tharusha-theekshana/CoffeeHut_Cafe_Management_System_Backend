@@ -97,7 +97,7 @@ public class BillServiceImpl implements BillService {
 
                 document.close();
 
-                return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.BILL_GENERATE_SUCCESSFULLY, HttpStatus.OK);
+                return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.generateBillMessage(CoffeeHutUtils.getUuid()) , HttpStatus.OK);
             } else {
                 return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.INVALID_DATA_BILL, HttpStatus.BAD_REQUEST);
             }

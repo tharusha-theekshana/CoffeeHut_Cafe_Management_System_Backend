@@ -11,7 +11,7 @@ public class CoffeeHutConstants {
             "    \t\t\t\t\"email\": Required !\"\",\n" +
             "    \t\t\t\t\"password\": Required !\"\"\n \t\t\t\t\t" +
             "} \n" +
-            "\t\t\t\t}";
+            "\t\t\t}";
     public static final String EMAIL_ALREADY_EXISTS = "Email Already Exists ... !";
     public static final String USER_REGISTER_SUCCESSFULLY = "User Register Successfully ... !";
     public static final String USER_LOGIN_SUCCESSFULLY = "User Login Successfully ... !";
@@ -44,7 +44,7 @@ public class CoffeeHutConstants {
             "    \t\t\t\t\"name\": Required !\"\",\n" +
             "    \t\t\t\t\"description\": Required ! \"\",\n" +
             "    \t\t\t\t\"price\": Required !\"\",\n" +
-            "    \t\t\t\t\"categoryId\": Required !\"\"\n \t\t\t\t\t" +
+            "    \t\t\t\"categoryId\": Required !\"\"\n \t\t\t\t\t" +
             "} \n" +
             "\t\t\t\t}";
     public static final String PRODUCT_SAVE_SUCCESSFULLY = "Product Saved Successfully ... !";
@@ -63,8 +63,15 @@ public class CoffeeHutConstants {
             "    \t\t\t\t\"productDetails\": Required !\"\",\n" +
             "    \t\t\t\t\"totalAmount\": Required !\"\"\n \t\t\t\t\t" +
             "} \n" +
-            "\t\t\t\t}";
+            "\t\t\t}";
 
-    public static final String BILL_GENERATE_SUCCESSFULLY = "Bill Generated Successfully ... !";
+
+    public static String generateBillMessage(String uuid) {
+        return String.format("{\n" +
+                "    \t\t\"Bill Generated Successfully ... !\",\n" +
+                "    \t\t\"Bill Id\": \"%s\"\n" +
+                "\t}", uuid);
+    }
+
     public static String LOCATION = "C:\\Projects\\Real projects\\CoffeeHut_Cafe_Management_System_Backend\\bills";
 }
