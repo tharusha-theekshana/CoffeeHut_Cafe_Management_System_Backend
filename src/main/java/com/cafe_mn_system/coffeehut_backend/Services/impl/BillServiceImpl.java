@@ -11,13 +11,17 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.io.IOUtils;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -129,6 +133,44 @@ public class BillServiceImpl implements BillService {
         }
         return CoffeeHutUtils.getResponseEntityForBillList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    // Get pdf for bill data
+    @Override
+    public ResponseEntity<byte[]> getPdf(Map<String, String> requestMap) {
+        try{
+
+            byte[] byteArray = new byte[0];
+
+            if (!requestMap.containsKey("uuid") && validateRequestMap(requestMap)){
+                return new ResponseEntity<>(byteArray,HttpStatus.BAD_REQUEST);
+
+            }else{
+                String filepath = CoffeeHutConstants.LOCATION + "\\" + requestMap.get("uuid").toString() + ".pdf";
+
+                if (CoffeeHutUtils.isFileExist(filepath)){
+                    byteArray = getByteArray(filepath);
+                    return new ResponseEntity<>(byteArray,HttpStatus.OK);
+                }else{
+                    requestMap.put("isGenerate","false");
+                    generateReport(requestMap);
+                    byteArray = getByteArray(filepath);
+                    return new ResponseEntity<>(byteArray,HttpStatus.OK);
+                }
+            }
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return null;
+    }
+
+    private byte[] getByteArray(String filepath) throws  Exception{
+        File initialFile = new File(filepath);
+        InputStream targetStream = new FileInputStream(initialFile);
+        byte[] byteArray = IOUtils.toByteArray(targetStream);
+        targetStream.close();
+        return byteArray;
+    }
+
 
     private void addRow(PdfPTable table, Map<String, Object> data) {
         // Define the font with size 10

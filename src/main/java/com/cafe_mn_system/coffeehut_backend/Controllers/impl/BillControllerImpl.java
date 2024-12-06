@@ -38,4 +38,14 @@ public class BillControllerImpl implements BillController {
         }
         return CoffeeHutUtils.getResponseEntityForBillList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<byte[]> getPdf(Map<String, String> requestMap) {
+        try{
+            return billService.getPdf(requestMap);
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -14,4 +14,7 @@ public interface BillController {
     @GetMapping()
     ResponseEntity<Map<String, Object>> getAllBills();
 
+    @PostMapping("/getPdf")
+    ResponseEntity<byte[]> getPdf(@RequestBody(required = true) Map<String,String> requestMap);
+
 }
