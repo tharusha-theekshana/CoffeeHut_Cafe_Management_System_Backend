@@ -74,4 +74,6 @@ public class CoffeeHutConstants {
     }
 
     public static String LOCATION = "C:\\Projects\\Real projects\\CoffeeHut_Cafe_Management_System_Backend\\bills";
+    public static final String BILL_NOT_FOUND = "Bill id Not Found ... !";
+    public static final String BILL_DELETED_SUCCESSFULLY = "Bill Deleted Successfully ... !";
 }

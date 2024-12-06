@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -161,6 +162,27 @@ public class BillServiceImpl implements BillService {
             exception.printStackTrace();
         }
         return null;
+    }
+
+    // Delete bill
+    @Override
+    public ResponseEntity<String> deleteBill(Integer id) {
+        try{
+
+            Optional<Bill> bill = billRepo.findById(id);
+
+            if (!bill.isEmpty()){
+
+                billRepo.deleteById(id);
+                return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.BILL_DELETED_SUCCESSFULLY, HttpStatus.OK);
+
+            }else{
+                return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.BILL_NOT_FOUND, HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private byte[] getByteArray(String filepath) throws  Exception{

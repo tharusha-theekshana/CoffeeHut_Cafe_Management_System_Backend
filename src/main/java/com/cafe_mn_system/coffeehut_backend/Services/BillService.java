@@ -8,4 +8,5 @@ public interface BillService {
     ResponseEntity<String> generateReport(Map<String, String> requestMap);
     ResponseEntity<Map<String, Object>> getAllBills();
     ResponseEntity<byte[]> getPdf(Map<String, String> requestMap);
+    ResponseEntity<String> deleteBill(Integer id);
 }

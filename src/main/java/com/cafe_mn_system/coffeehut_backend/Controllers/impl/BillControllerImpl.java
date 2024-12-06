@@ -48,4 +48,14 @@ public class BillControllerImpl implements BillController {
         }
         return null;
     }
+
+    @Override
+    public ResponseEntity<String> deleteBill(Integer id) {
+        try{
+            return billService.deleteBill(id);
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

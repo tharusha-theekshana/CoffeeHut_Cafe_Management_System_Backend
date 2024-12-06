@@ -17,4 +17,7 @@ public interface BillController {
     @PostMapping("/getPdf")
     ResponseEntity<byte[]> getPdf(@RequestBody(required = true) Map<String,String> requestMap);
 
+    @DeleteMapping("/{id}")
+    ResponseEntity<String> deleteBill(@PathVariable Integer id);
+
 }
