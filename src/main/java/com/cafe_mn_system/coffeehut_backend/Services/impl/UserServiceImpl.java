@@ -105,16 +105,16 @@ public class UserServiceImpl implements UserService {
             if (jwtFilter.isAdmin()) {
 
                 List<UserDto> userList = userRepo.getAllUsers();
-                return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.FETCH_DATA_SUCCESSFULLY, userList, HttpStatus.OK);
+                return CoffeeHutUtils.getResponseEntityForUserList(CoffeeHutConstants.FETCH_DATA_SUCCESSFULLY, userList, HttpStatus.OK);
 
             } else {
-                return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.ACCESS_DENIED, new ArrayList<>(), HttpStatus.UNAUTHORIZED);
+                return CoffeeHutUtils.getResponseEntityForUserList(CoffeeHutConstants.ACCESS_DENIED, new ArrayList<>(), HttpStatus.UNAUTHORIZED);
             }
 
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.SOMETHING_WENT_WRONG, new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return CoffeeHutUtils.getResponseEntityForUserList(CoffeeHutConstants.SOMETHING_WENT_WRONG, new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override

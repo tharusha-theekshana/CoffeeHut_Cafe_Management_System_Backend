@@ -2,6 +2,7 @@ package com.cafe_mn_system.coffeehut_backend.Utils;
 
 import com.cafe_mn_system.coffeehut_backend.Dto.ProductDto;
 import com.cafe_mn_system.coffeehut_backend.Dto.UserDto;
+import com.cafe_mn_system.coffeehut_backend.Models.Bill;
 import com.cafe_mn_system.coffeehut_backend.Models.Category;
 import com.google.common.base.Strings;
 import com.google.common.reflect.TypeToken;
@@ -35,7 +36,7 @@ public class CoffeeHutUtils {
         return new ResponseEntity<>(responseBody, httpStatus);
     }
 
-    public static ResponseEntity<Map<String, Object>> getResponseEntityForList(String message, List<UserDto> userList, HttpStatus httpStatus) {
+    public static ResponseEntity<Map<String, Object>> getResponseEntityForUserList(String message, List<UserDto> userList, HttpStatus httpStatus) {
 
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("Status", httpStatus.value());
@@ -71,6 +72,16 @@ public class CoffeeHutUtils {
         responseBody.put("Status", httpStatus.value());
         responseBody.put("Message", message);
         responseBody.put("Data", product);
+
+        return new ResponseEntity<>(responseBody, httpStatus);
+    }
+
+    public static ResponseEntity<Map<String, Object>> getResponseEntityForBillList(String message, List<Bill> billList, HttpStatus httpStatus) {
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("Status", httpStatus.value());
+        responseBody.put("Message", message);
+        responseBody.put("Data", billList);
 
         return new ResponseEntity<>(responseBody, httpStatus);
     }

@@ -45,7 +45,7 @@ public class UserControllerImpl implements UserController {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.ACCESS_DENIED,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return CoffeeHutUtils.getResponseEntityForUserList(CoffeeHutConstants.ACCESS_DENIED,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override

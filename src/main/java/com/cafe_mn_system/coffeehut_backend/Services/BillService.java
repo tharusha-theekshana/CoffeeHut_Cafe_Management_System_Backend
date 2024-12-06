@@ -6,4 +6,5 @@ import java.util.Map;
 
 public interface BillService {
     ResponseEntity<String> generateReport(Map<String, String> requestMap);
+    ResponseEntity<Map<String, Object>> getAllBills();
 }
