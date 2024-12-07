@@ -89,6 +89,16 @@ public class CoffeeHutUtils {
         return new ResponseEntity<>(responseBody, httpStatus);
     }
 
+    public static ResponseEntity<Map<String, Object>> getResponseEntityForDashboard(String message, Map<String, Object>  map, HttpStatus httpStatus) {
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("Status", httpStatus.value());
+        responseBody.put("Message", message);
+        responseBody.put("Data", map);
+
+        return new ResponseEntity<>(responseBody, httpStatus);
+    }
+
     public static String getUuid() {
         Date date = new Date();
         Long time = date.getTime();
