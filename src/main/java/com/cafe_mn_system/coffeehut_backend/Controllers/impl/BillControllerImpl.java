@@ -1,7 +1,7 @@
 package com.cafe_mn_system.coffeehut_backend.Controllers.impl;
 
-import com.cafe_mn_system.coffeehut_backend.Controllers.CategoryController;
-import com.cafe_mn_system.coffeehut_backend.Services.CategoryService;
+import com.cafe_mn_system.coffeehut_backend.Controllers.BillController;
+import com.cafe_mn_system.coffeehut_backend.Services.BillService;
 import com.cafe_mn_system.coffeehut_backend.Utils.CoffeeHutConstants;
 import com.cafe_mn_system.coffeehut_backend.Utils.CoffeeHutUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Map;
 
+
 @RestController
-public class CategoryControllerImpl implements CategoryController {
+public class BillControllerImpl implements BillController {
 
     @Autowired
-    private CategoryService categoryService;
+    private BillService billService;
 
     @Override
-    public ResponseEntity<String> addNewCategory(Map<String, String> requestMap) {
+    public ResponseEntity<String> generateReport(Map<String, String> requestMap) {
         try{
-            return categoryService.addNewCategory(requestMap);
+            return billService.generateReport(requestMap);
         }catch (Exception exception){
             exception.printStackTrace();
         }
@@ -29,33 +30,32 @@ public class CategoryControllerImpl implements CategoryController {
     }
 
     @Override
-    public ResponseEntity<Map<String, Object>> getAllCategories(String filterValue) {
+    public ResponseEntity<Map<String, Object>> getAllBills() {
         try{
-            return categoryService.getAllCategories(filterValue);
+            return billService.getAllBills();
         }catch (Exception exception){
             exception.printStackTrace();
         }
-        return CoffeeHutUtils.getResponseEntityForCategoryList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return CoffeeHutUtils.getResponseEntityForBillList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
-    public ResponseEntity<String> updateCategory(Map<String, String> requestMap) {
+    public ResponseEntity<byte[]> getPdf(Map<String, String> requestMap) {
         try{
-            return categoryService.updateCategory(requestMap);
+            return billService.getPdf(requestMap);
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<String> deleteBill(Integer id) {
+        try{
+            return billService.deleteBill(id);
         }catch (Exception exception){
             exception.printStackTrace();
         }
         return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-    @Override
-    public ResponseEntity<String> deleteCategory(String id) {
-        try{
-            return categoryService.deleteCategory(id);
-        }catch (Exception exception){
-            exception.printStackTrace();
-        }
-        return CoffeeHutUtils.getResponseEntity(CoffeeHutConstants.MESSAGE, CoffeeHutConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
 }

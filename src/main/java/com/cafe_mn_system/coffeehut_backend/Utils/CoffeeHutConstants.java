@@ -11,7 +11,7 @@ public class CoffeeHutConstants {
             "    \t\t\t\t\"email\": Required !\"\",\n" +
             "    \t\t\t\t\"password\": Required !\"\"\n \t\t\t\t\t" +
             "} \n" +
-            "\t\t\t\t}";
+            "\t\t\t}";
     public static final String EMAIL_ALREADY_EXISTS = "Email Already Exists ... !";
     public static final String USER_REGISTER_SUCCESSFULLY = "User Register Successfully ... !";
     public static final String USER_LOGIN_SUCCESSFULLY = "User Login Successfully ... !";
@@ -44,7 +44,7 @@ public class CoffeeHutConstants {
             "    \t\t\t\t\"name\": Required !\"\",\n" +
             "    \t\t\t\t\"description\": Required ! \"\",\n" +
             "    \t\t\t\t\"price\": Required !\"\",\n" +
-            "    \t\t\t\t\"categoryId\": Required !\"\"\n \t\t\t\t\t" +
+            "    \t\t\t\"categoryId\": Required !\"\"\n \t\t\t\t\t" +
             "} \n" +
             "\t\t\t\t}";
     public static final String PRODUCT_SAVE_SUCCESSFULLY = "Product Saved Successfully ... !";
@@ -53,4 +53,27 @@ public class CoffeeHutConstants {
     public static final String PRODUCT_DELETED_SUCCESSFULLY = "Product Deleted Successfully ... !";
     public static final String PRODUCT_STATUS_FALSE = "Product Status is not Active ... !";
     public static final String PRODUCT_STATUS_TRUE = "Product Status is Active ... !";
+    public static final String INVALID_DATA_BILL = "{" +
+            " \"Invalid Data. All Data is Required !\",\n" +
+            "  \t\t\t\"data\": {\n" +
+            "    \t\t\t\t\"name\": Required !\"\",\n" +
+            "    \t\t\t\t\"contactNumber\": Required ! \"\",\n" +
+            "    \t\t\t\t\"email\": Required !\"\",\n" +
+            "    \t\t\t\t\"paymentMethod\": Required !\"\",\n" +
+            "    \t\t\t\t\"productDetails\": Required !\"\",\n" +
+            "    \t\t\t\t\"totalAmount\": Required !\"\"\n \t\t\t\t\t" +
+            "} \n" +
+            "\t\t\t}";
+
+
+    public static String generateBillMessage(String uuid) {
+        return String.format("{\n" +
+                "    \t\t\"Bill Generated Successfully ... !\",\n" +
+                "    \t\t\"Bill Id\": \"%s\"\n" +
+                "\t}", uuid);
+    }
+
+    public static String LOCATION = "C:\\Projects\\Real projects\\CoffeeHut_Cafe_Management_System_Backend\\bills";
+    public static final String BILL_NOT_FOUND = "Bill id Not Found ... !";
+    public static final String BILL_DELETED_SUCCESSFULLY = "Bill Deleted Successfully ... !";
 }

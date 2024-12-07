@@ -35,7 +35,7 @@ public class ProductControllerImpl implements ProductController {
         }catch (Exception exception){
             exception.printStackTrace();
         }
-        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return CoffeeHutUtils.getResponseEntityForProductList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class ProductControllerImpl implements ProductController {
         }catch (Exception exception){
             exception.printStackTrace();
         }
-        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return CoffeeHutUtils.getResponseEntityForProductList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
@@ -85,6 +85,6 @@ public class ProductControllerImpl implements ProductController {
         }catch (Exception exception){
             exception.printStackTrace();
         }
-        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return CoffeeHutUtils.getResponseEntityForProductList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -60,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
         }catch (Exception exception){
             exception.printStackTrace();
         }
-        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.SOMETHING_WENT_WRONG, new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return CoffeeHutUtils.getResponseEntityForProductList(CoffeeHutConstants.SOMETHING_WENT_WRONG, new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // Update product
@@ -158,7 +158,7 @@ public class ProductServiceImpl implements ProductService {
         }catch (Exception exception){
             exception.printStackTrace();
         }
-        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return CoffeeHutUtils.getResponseEntityForProductList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // Get product by id
@@ -175,7 +175,7 @@ public class ProductServiceImpl implements ProductService {
         }catch (Exception exception){
             exception.printStackTrace();
         }
-        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return CoffeeHutUtils.getResponseEntityForProductList(CoffeeHutConstants.MESSAGE,  new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private Product getProductFromMap(Map<String, String> requestMap, boolean isAdd) {

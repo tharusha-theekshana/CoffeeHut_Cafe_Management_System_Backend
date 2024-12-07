@@ -68,7 +68,7 @@ public class CategoryServiceImpl implements CategoryService {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-        return CoffeeHutUtils.getResponseEntityForList(CoffeeHutConstants.SOMETHING_WENT_WRONG, new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return CoffeeHutUtils.getResponseEntityForCategoryList(CoffeeHutConstants.SOMETHING_WENT_WRONG, new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // Update category
